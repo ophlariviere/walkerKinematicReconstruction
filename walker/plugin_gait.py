@@ -172,10 +172,11 @@ class SimplePluginGait(BiomechanicalModel):
             rotations=Rotations.XYZ,
             segment_coordinate_system=SegmentCoordinateSystem(
                 origin=self._pelvis_joint_center,
-                first_axis=Axis(name=Axis.Name.X, start=lambda m, bio: (m["LPSIS"] + m["RPSIS"]) / 2, end="RASIS"),
+                first_axis=Axis(name=Axis.Name.X, start=lambda m, bio: (m["LPSIS"] + m["RPSIS"]) / 2, end=lambda m, bio: (m["LASIS"] + m["RASIS"]) / 2),
                 second_axis=Axis(name=Axis.Name.Y, start="RASIS", end="LASIS"),
                 axis_to_keep=Axis.Name.Y,
             ),
+
             mesh=Mesh(("LPSIS", "RPSIS", "RASIS", "LASIS", "LPSIS")),
             inertia_parameters=InertiaParameters(
                 mass=lambda m, bio: 0.145 * self.body_mass,
@@ -584,6 +585,7 @@ class SimplePluginGait(BiomechanicalModel):
         #self["RFoot"].add_marker(Marker("RLM", is_technical=True, is_anatomical=True))
         #self["RFoot"].add_marker(Marker("RSPH", is_technical=True, is_anatomical=True))
         self["RFoot"].add_marker(Marker("RMFH1", is_technical=True, is_anatomical=True))
+
 
         self["LFemur"] = Segment(
             parent_name="Pelvis",
