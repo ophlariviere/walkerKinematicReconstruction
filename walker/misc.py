@@ -73,7 +73,7 @@ def to_rotation_matrix(
 
 
 def to_euler(rt, sequence: str) -> np.ndarray:
-    if sequence == "xyz":
+    if sequence == "xyz" or 'x':
         rx = np.arctan2(-rt[1, 2, :], rt[2, 2, :])
         ry = np.arcsin(rt[0, 2, :])
         rz = np.arctan2(-rt[0, 1, :], rt[0, 0, :])
