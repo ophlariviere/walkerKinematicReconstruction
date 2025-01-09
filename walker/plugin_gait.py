@@ -428,7 +428,8 @@ class SimplePluginGait(BiomechanicalModel):
             inertia_parameters=InertiaParameters(
                 mass=lambda m, bio: self.mass_coefficients["Radius"] * self.body_mass,
                 center_of_mass=lambda m, bio: point_on_vector(
-                    0.57, start=self._elbow_joint_center(m, bio, "R"), end=self._wrist_joint_center(m, bio, "R")
+                    0.57, start=self._elbow_joint_center(m, bio, "R"),
+                    end=self._wrist_joint_center(m, bio, "R")
                 ),
                 inertia=lambda m, bio: InertiaParameters.radii_of_gyration_to_inertia(
                     mass=self.mass_coefficients["Radius"] * self.body_mass,
