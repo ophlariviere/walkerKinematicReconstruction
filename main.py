@@ -1,25 +1,26 @@
 from walker import BiomechanicsTools
-"""
+
 # --- Options --- #
-data_path = "E:\\eWalking_WP1_DataBrut\\OK\\LAO_01\\Venue 2\\AQM\\c3d"
-kinematic_model_file_path = "walker\\LAO.bioMod"
-static_trial = f"{data_path}\\LAO_01_Statique.c3d"
-trials = (f"{data_path}\\LAO_01_Cond0001.c3d",
-    f"{data_path}\\LAO_01_Cond0002.c3d",
-    f"{data_path}\\LAO_01_Cond0003.c3d",
-    f"{data_path}\\LAO_01_Cond0004.c3d",
-    f"{data_path}\\LAO_01_Cond0005.c3d",
-    f"{data_path}\\LAO_01_Cond0006.c3d",
-    f"{data_path}\\LAO_01_Cond0007.c3d",
-    f"{data_path}\\LAO_01_Cond0008.c3d",
-    f"{data_path}\\LAO_01_Cond0009.c3d",
-    f"{data_path}\\LAO_01_Cond0010.c3d",
-    f"{data_path}\\LAO_01_Cond0011.c3d",
-    f"{data_path}\\LAO_01_Cond0012.c3d",
-    f"{data_path}\\LAO_01_Cond0013.c3d",
-    f"{data_path}\\LAO_01_Cond0014.c3d",
-    f"{data_path}\\LAO_01_Cond0015.c3d",
-    f"{data_path}\\LAO_01_Cond0016.c3d")
+data_path = "D:\\GOOD\\VIF_04\\c3d"  # "F:\\datos\\LAO_01\\Venue2\\c3d"
+kinematic_model_file_path = "walker\\VIF.bioMod"
+static_trial = f"{data_path}\\VIF_04_Statique.c3d"
+trials = (f"{data_path}\\VIF_04_Cond0001.c3d",
+          f"{data_path}\\LAO_01_Cond0002.c3d",
+          f"{data_path}\\LAO_01_Cond0003.c3d",
+          f"{data_path}\\LAO_01_Cond0004.c3d",
+          f"{data_path}\\LAO_01_Cond0005.c3d",
+          f"{data_path}\\LAO_01_Cond0006.c3d",
+          f"{data_path}\\LAO_01_Cond0007.c3d",
+          f"{data_path}\\LAO_01_Cond0008.c3d",
+          f"{data_path}\\LAO_01_Cond0009.c3d",
+          f"{data_path}\\LAO_01_Cond0010.c3d",
+          f"{data_path}\\LAO_01_Cond0011.c3d",
+          f"{data_path}\\LAO_01_Cond0012.c3d",
+          f"{data_path}\\LAO_01_Cond0013.c3d",
+          f"{data_path}\\LAO_01_Cond0014.c3d",
+          f"{data_path}\\LAO_01_Cond0015.c3d",
+          f"{data_path}\\LAO_01_Cond0016.c3d")
+
 print(kinematic_model_file_path)
 print('****')
 # --------------- #
@@ -28,7 +29,7 @@ print('****')
 def main():
     print(kinematic_model_file_path)
     # Generate the personalized kinematic model
-    tools = BiomechanicsTools(body_mass=58, include_upper_body=True)
+    tools = BiomechanicsTools(body_mass=71, sexe='M', include_upper_body=True)
     tools.personalize_model(static_trial, kinematic_model_file_path)
 
     # Perform some biomechanical computation
@@ -94,3 +95,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""

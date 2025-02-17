@@ -96,13 +96,14 @@ class BiomechanicsTools:
         compute_automatic_events
             If the automatic event finding algorithm should be used. Otherwise, the events in the c3d file are used
         """
+
         self.process_kinematics(trial, visualize=False)
         self.inverse_dynamics()
         self.calculate_H()
         # Write the c3d as if it was the plug in gate output
         path = os.path.dirname(trial)
         file_name = os.path.splitext(os.path.basename(trial))[0]
-        self.to_c3d(f"{path}/{file_name}_processed6.c3d", compute_automatic_events=compute_automatic_events)
+        self.to_c3d(f"{path}/{file_name}_processed7.c3d", compute_automatic_events=compute_automatic_events)
 
     def process_kinematics(self, trial: str, visualize: bool = False):
         """
@@ -306,7 +307,7 @@ class BiomechanicsTools:
 
             data = self.q[angle_index, :]
             rot = to_rotation_matrix(angles=data, angle_sequence=angle_sequence)
-            euler_angles = to_euler(rot, angle_sequence)
+            # euler_angles = to_euler(rot, angle_sequence)
             #  self.q[angle_index, :] = self.wrap_to_180(np.unwrap(euler_angles, axis=1))
             self.q[angle_index, :] = np.unwrap(to_euler(rot, angle_sequence), axis=1)
 
@@ -675,9 +676,10 @@ class BiomechanicsTools:
             data[:3, point_names.index(f"{dof}Acc"), :] = self.qddot[idx, :]
             data[:3, point_names.index(f"{dof}Moment"), :] = self.tau[idx, :]
             data[:3, point_names.index(f"{dof}Power"), :] = self.tau[idx, :] * self.qdot[idx, :]
+
         c3d["data"]["points"] = data
 
-        """ 
+        """
         # Affichage
         self.bioviz_window = bioviz.Viz(loaded_model=self.model)
         self.bioviz_window.load_movement(self.q)
@@ -702,12 +704,12 @@ class BiomechanicsTools:
         if self.events is None:
             raise RuntimeError("No events found, have you clicked Export C3D?")
         events_number, events_contexts, events_labels, events_times = self.events
-
+        
         c3d.add_parameter("EVENT", "USED", (events_number,))
         c3d.add_parameter("EVENT", "CONTEXTS", events_contexts)
         c3d.add_parameter("EVENT", "LABELS", events_labels)
         c3d.add_parameter("EVENT", "TIMES", events_times)
-        """
+"""
         # Copy the header
         for element in self.c3d["header"]:
             for item in self.c3d["header"][element]:
