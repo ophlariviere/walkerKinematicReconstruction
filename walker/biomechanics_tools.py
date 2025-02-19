@@ -52,14 +52,28 @@ class BiomechanicsTools:
         return self.com
 
     @staticmethod
-    def forcedatafilter(data, order, sampling_rate, cutoff_freq):
+    def nan_filtfilt(b, a, data):
+        """ Applique filtfilt en ignorant les NaN """
+        nan_mask = np.isnan(data)
+        if np.all(nan_mask):  # Si toute la colonne est NaN, on la met à zéro
+            return np.zeros_like(data)
+
+        filtered = np.copy(data)
+        valid_idx = np.where(~nan_mask)[0]  # Indices des valeurs non-NaN
+        if len(valid_idx) > 1:  # Filtrer uniquement si au moins 2 points valides
+            filtered[valid_idx] = filtfilt(b, a, data[valid_idx])
+
+        return filtered
+
+
+    def forcedatafilter(self, data, order, sampling_rate, cutoff_freq):
         nyquist = 0.5 * sampling_rate
         normal_cutoff = cutoff_freq / nyquist
         b, a = butter(order, normal_cutoff, btype='low', analog=False)
         filtered_data = np.empty([len(data[:, 0]), len(data[0, :])])
         for ii in range(3):
             # filtered_data[ii, :] = medfilt(data[ii, :], kernel_size=5)
-            filtered_data[ii, :] = filtfilt(b, a, data[ii, :], axis=0)
+            filtered_data[ii, :] = self.nan_filtfilt(b, a, data[ii, :])
         return filtered_data
 
     @staticmethod
@@ -81,8 +95,13 @@ class BiomechanicsTools:
         model_path
             The path of the generated bioMod file
         """
+        data=C3dData(static_trial)
+        n_frames = data.values["LASIS"].shape
 
-        self.generic_model.write(save_path=model_path, data=C3dData(static_trial))
+        if len(n_frames) == 1:  # Si on a une seule frame
+            for key in data.values:  # Parcourir chaque clé du dictionnaire
+                data.values[key] = data.values[key][:, np.newaxis]  # Ajouter une dimension pour obtenir la forme (4, 1)
+        self.generic_model.write(save_path=model_path, data=data)
         self.model = biorbd.Model(model_path)
 
     def process_trial(self, trial: str, compute_automatic_events: bool = False) -> None:
